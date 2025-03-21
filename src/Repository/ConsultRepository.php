@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Consult;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,7 +16,28 @@ class ConsultRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Consult::class);
     }
+    public function findConsultationsToday(User $veterinary)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.consultDate = :today')
+            ->andWhere('c.veterinary = :vet')
+            ->setParameter('today', new \DateTime('today'))
+            ->setParameter('vet', $veterinary)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findConsultationsBetweenDates(\DateTimeInterface $startDate, \DateTimeInterface $endDate)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.consultDate BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+    
 
+    
 //    /**
 //     * @return Consult[] Returns an array of Consult objects
 //     */
