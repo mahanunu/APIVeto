@@ -36,16 +36,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     #[Groups(['read', 'write'])]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     #[Groups(['read'])]
     private ?string $password = null;
@@ -65,6 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const ROLE_VETERINARIAN = 'ROLE_VETERINARIAN';
     public const ROLE_ASSISTANT = 'ROLE_ASSISTANT';
     public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_OWNER = 'ROLE_OWNER';
 
     public function getId(): ?int
     {
@@ -79,7 +74,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -100,7 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -118,6 +111,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function canBeAssignedAsOwner(): bool
+    {
+        $roles = $this->getRoles();
+        return empty($roles) || in_array(self::ROLE_USER, $roles, true);
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -126,7 +125,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
     
@@ -138,7 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(string $plainPassword): static
     {
         $this->plainPassword = $plainPassword;
- 
         return $this;
     }
 
@@ -155,19 +152,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstname(string $firstname): static
     {
         $this->firstname = $firstname;
-
         return $this;
     }
+
     public function getLastname(): ?string
-{
-    return $this->lastname;
-}
+    {
+        return $this->lastname;
+    }
 
-public function setLastname(string $lastname): static
-{
-    $this->lastname = $lastname;
-
-    return $this;
+    public function setLastname(string $lastname): static
+    {
+        $this->lastname = $lastname;
+        return $this;
+    }
 }
-}
-

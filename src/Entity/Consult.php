@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
@@ -30,17 +31,13 @@ class Consult
     public const STATUS_IN_PROGRESS = 'en cours';
     public const STATUS_COMPLETED = 'terminé';
 
-    #[ORM\Column(length: 20)]
-    private ?string $status = self::STATUS_SCHEDULED;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creationDate = null;
-
+    private ?\DateTimeInterface $creationDate;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $consultDate = null;
@@ -60,24 +57,21 @@ class Consult
     #[ORM\JoinColumn(nullable: false)]
     private ?User $veterinary = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 20)]
+    private ?string $status = self::STATUS_SCHEDULED;
 
-    /**
-     * @var Collection<int, Treatment>
-     */
-    #[ORM\ManyToMany(targetEntity: Treatment::class)]
+    #[ApiProperty]
+    #[ORM\ManyToMany(targetEntity: Treatment::class, inversedBy: "consults")]
     private Collection $treatment;
 
     #[ORM\Column(type: Types::STRING, length: 10, options: ["default" => "unpaid"])]
     private ?string $paymentStatus = "unpaid";
 
-
     public function __construct()
     {
-        $this->creationDate = new \DateTime(); 
+        $this->creationDate = new \DateTime();
         $this->treatment = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -89,13 +83,6 @@ class Consult
         return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creationDate): static
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
     public function getConsultDate(): ?\DateTimeInterface
     {
         return $this->consultDate;
@@ -104,7 +91,6 @@ class Consult
     public function setConsultDate(\DateTimeInterface $consultDate): static
     {
         $this->consultDate = $consultDate;
-
         return $this;
     }
 
@@ -116,7 +102,6 @@ class Consult
     public function setReason(string $reason): static
     {
         $this->reason = $reason;
-
         return $this;
     }
 
@@ -128,7 +113,6 @@ class Consult
     public function setAnimal(?Animal $animal): static
     {
         $this->animal = $animal;
-
         return $this;
     }
 
@@ -140,7 +124,6 @@ class Consult
     public function setAssistant(?User $assistant): static
     {
         $this->assistant = $assistant;
-
         return $this;
     }
 
@@ -152,7 +135,6 @@ class Consult
     public function setVeterinary(?User $veterinary): static
     {
         $this->veterinary = $veterinary;
-
         return $this;
     }
 
@@ -171,10 +153,6 @@ class Consult
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Treatment>
-     */
     public function getTreatment(): Collection
     {
         return $this->treatment;
@@ -185,17 +163,14 @@ class Consult
         if (!$this->treatment->contains($treatment)) {
             $this->treatment->add($treatment);
         }
-
         return $this;
     }
 
     public function removeTreatment(Treatment $treatment): static
     {
         $this->treatment->removeElement($treatment);
-
         return $this;
     }
-    #[ORM\Column(type: Types::STRING, length: 10, options: ["default" => "unpaid"])]
 
     public function getPaymentStatus(): ?string
     {
@@ -207,12 +182,4 @@ class Consult
         $this->paymentStatus = $status;
         return $this;
     }
-    public function assignVeterinary(User $veterinary): static
-    {
-        if ($this->veterinary === null) {
-            $this->veterinary = $veterinary;
-        }
-        return $this;
-    }
-
 }
