@@ -17,11 +17,11 @@ use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN')", securityMessage: 'You are not allowed to get users'),
+        new GetCollection(),
         new Post(processor: UserPasswordHasherProcessor::class),
-        new Get(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to get this user'),
-        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to edit this user'),
-        new Delete(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to delete this user'),
+        new Get(),
+        new Patch(processor: UserPasswordHasherProcessor::class),
+        new Delete(),
     ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -56,6 +56,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Groups(['read', 'write'])]
     private ?string $firstname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read', 'write'])]
+    private ?string $lastname = null;
 
     public const ROLE_DIRECTOR = 'ROLE_DIRECTOR';
     public const ROLE_VETERINARIAN = 'ROLE_VETERINARIAN';
@@ -154,4 +158,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getLastname(): ?string
+{
+    return $this->lastname;
 }
+
+public function setLastname(string $lastname): static
+{
+    $this->lastname = $lastname;
+
+    return $this;
+}
+}
+
