@@ -19,13 +19,20 @@ use ApiPlatform\Metadata\Delete;
         new GetCollection(security: "is_granted('ROLE_ASSISTANT') or is_granted('ROLE_VETERINARIAN')"),
         new Get(security: "is_granted('ROLE_ASSISTANT') or is_granted('ROLE_VETERINARIAN')"),
         new Post(security: "is_granted('ROLE_ASSISTANT')"),
-        new Put(security: "is_granted('ROLE_ASSISTANT') and object.getStatut() != 'terminé'"),
+        new Put(security: "is_granted('ROLE_ASSISTANT')", securityMessage: "Seuls les assistants peuvent mettre à jour le paiement."),
         new Delete(security: "is_granted('ROLE_DIRECTOR')")
     ]
 )]
 #[ORM\Entity(repositoryClass: ConsultRepository::class)]
 class Consult
 {
+    public const STATUS_SCHEDULED = 'programmé';
+    public const STATUS_IN_PROGRESS = 'en cours';
+    public const STATUS_COMPLETED = 'terminé';
+
+    #[ORM\Column(length: 20)]
+    private ?string $status = self::STATUS_SCHEDULED;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,6 +40,7 @@ class Consult
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $consultDate = null;
@@ -53,7 +61,6 @@ class Consult
     private ?User $veterinary = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
 
     /**
      * @var Collection<int, Treatment>
@@ -61,10 +68,16 @@ class Consult
     #[ORM\ManyToMany(targetEntity: Treatment::class)]
     private Collection $treatment;
 
+    #[ORM\Column(type: Types::STRING, length: 10, options: ["default" => "unpaid"])]
+    private ?string $paymentStatus = "unpaid";
+
+
     public function __construct()
     {
+        $this->creationDate = new \DateTime(); 
         $this->treatment = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -150,10 +163,14 @@ class Consult
 
     public function setStatus(string $status): static
     {
-        $this->status = $status;
+        if (!in_array($status, [self::STATUS_SCHEDULED, self::STATUS_IN_PROGRESS, self::STATUS_COMPLETED])) {
+            throw new \InvalidArgumentException("Statut invalide.");
+        }
 
+        $this->status = $status;
         return $this;
     }
+
 
     /**
      * @return Collection<int, Treatment>
@@ -178,4 +195,24 @@ class Consult
 
         return $this;
     }
+    #[ORM\Column(type: Types::STRING, length: 10, options: ["default" => "unpaid"])]
+
+    public function getPaymentStatus(): ?string
+    {
+        return $this->paymentStatus;
+    }
+
+    public function setPaymentStatus(string $status): static
+    {
+        $this->paymentStatus = $status;
+        return $this;
+    }
+    public function assignVeterinary(User $veterinary): static
+    {
+        if ($this->veterinary === null) {
+            $this->veterinary = $veterinary;
+        }
+        return $this;
+    }
+
 }
