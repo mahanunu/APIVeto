@@ -17,11 +17,11 @@ use App\State\UserPasswordHasherProcessor;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Post(processor: UserPasswordHasherProcessor::class),
-        new Get(),
-        new Patch(processor: UserPasswordHasherProcessor::class),
-        new Delete(),
+        new GetCollection(security: "is_granted('ROLE_DIRECTOR')", securityMessage: 'Vous ne pouvez pas voir la liste des utilisateurs.'),
+        new Post(security: "is_granted('ROLE_DIRECTOR')", processor: UserPasswordHasherProcessor::class, securityMessage: 'Seul le directeur peut créer des comptes.'),
+        new Get(security: "is_granted('ROLE_DIRECTOR') or object == user", securityMessage: 'Vous ne pouvez pas voir cet utilisateur.'),
+        new Patch(security: "is_granted('ROLE_DIRECTOR') or object == user", processor: UserPasswordHasherProcessor::class, securityMessage: 'Vous ne pouvez modifier que votre propre compte.'),
+        new Delete(security: "is_granted('ROLE_DIRECTOR')", securityMessage: 'Seul le directeur peut supprimer des utilisateurs.'),
     ],
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]

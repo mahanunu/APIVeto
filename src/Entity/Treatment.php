@@ -5,9 +5,22 @@ namespace App\Entity;
 use App\Repository\TreatmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 
 
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_VETERINARIAN')"),
+        new Get(security: "is_granted('ROLE_VETERINARIAN')"),
+        new Post(security: "is_granted('ROLE_VETERINARIAN')"),
+        new Put(security: "is_granted('ROLE_VETERINARIAN')"),
+        new Delete(security: "is_granted('ROLE_VETERINARIAN')")
+    ]
+)]
 #[ORM\Entity(repositoryClass: TreatmentRepository::class)]
 class Treatment
 {
