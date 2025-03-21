@@ -3,15 +3,29 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use App\State\UserPasswordHasherProcessor;
 
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN')", securityMessage: 'You are not allowed to get users'),
+        new Post(processor: UserPasswordHasherProcessor::class),
+        new Get(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to get this user'),
+        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_DIRECTOR') or is_granted('ROLE_VETERINARIAN') or object == user", securityMessage: 'You are not allowed to delete this user'),
+    ],
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,31 +33,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lastname = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $role = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    #[Groups(['read', 'write'])]
+    private array $roles = [];
 
     /**
-     * @var Collection<int, Animal>
+     * @var string The hashed password
      */
-    #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'owner')]
-    private Collection $animal;
+    #[ORM\Column]
+    #[Groups(['read'])]
+    private ?string $password = null;
 
-    public function __construct()
-    {
-        $this->animal = new ArrayCollection();
-    }
+    #[Groups(['read', 'write'])]
+    private ?string $plainPassword = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
+    private ?string $firstname = null;
+
+    public const ROLE_DIRECTOR = 'ROLE_DIRECTOR';
+    public const ROLE_VETERINARIAN = 'ROLE_VETERINARIAN';
+    public const ROLE_ASSISTANT = 'ROLE_ASSISTANT';
+    public const ROLE_USER = 'ROLE_USER';
 
     public function getId(): ?int
     {
@@ -54,10 +71,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->email;
     }
-
+    
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        if (empty($roles)) {
+            $roles[] = self::ROLE_USER;
+        }
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): static
+    {
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+        return $this;
+    }
+
+    public function removeRole(string $role): static
+    {
+        $this->roles = array_filter($this->roles, fn($r) => $r !== $role);
         return $this;
     }
 
@@ -69,7 +122,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
         return $this;
+    }
+    
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+ 
+    public function setPlainPassword(string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+ 
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
     }
 
     public function getFirstname(): ?string
@@ -80,72 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstname(string $firstname): static
     {
         $this->firstname = $firstname;
+
         return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): static
-    {
-        $this->lastname = $lastname;
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Animal>
-     */
-    public function getAnimal(): Collection
-    {
-        return $this->animal;
-    }
-
-    public function addAnimal(Animal $animal): static
-    {
-        if (!$this->animal->contains($animal)) {
-            $this->animal->add($animal);
-            $animal->setOwner($this);
-        }
-        return $this;
-    }
-
-    public function removeAnimal(Animal $animal): static
-    {
-        if ($this->animal->removeElement($animal)) {
-            if ($animal->getOwner() === $this) {
-                $animal->setOwner(null);
-            }
-        }
-        return $this;
-    }
-
-    // Implémentation des méthodes de UserInterface
-
-    public function getRoles(): array
-    {
-        return [$this->role ?? 'ROLE_CLIENT']; // Par défaut, un utilisateur non authentifié est un client
-    }
-
-    public function eraseCredentials(): void
-    {
-        // Si des données sensibles sont stockées temporairement, les effacer ici
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return $this->email;
     }
 }
