@@ -8,9 +8,21 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 
-
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_ASSISTANT') or is_granted('ROLE_VETERINARIAN')"),
+        new Get(security: "is_granted('ROLE_ASSISTANT') or is_granted('ROLE_VETERINARIAN')"),
+        new Post(security: "is_granted('ROLE_ASSISTANT')"),
+        new Put(security: "is_granted('ROLE_ASSISTANT') and object.getStatut() != 'terminé'"),
+        new Delete(security: "is_granted('ROLE_DIRECTOR')")
+    ]
+)]
 #[ORM\Entity(repositoryClass: ConsultRepository::class)]
 class Consult
 {
