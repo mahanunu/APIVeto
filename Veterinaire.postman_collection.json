@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "f8716b1f-4333-41b3-b960-0896a08b9e86",
+		"name": "Veterinaire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34764187"
+	},
+	"item": [
+		{
+			"name": "get medias",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/media",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"media"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get consults",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NTA5MzgsImV4cCI6MTc0MjU1NDUzOCwicm9sZXMiOlsiUk9MRV9ESVJFQ1RPUiJdLCJ1c2VybmFtZSI6Imthb0BnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJrYW8ifQ.o5RXpxys4Wvx0RJQ_9vhLYdm8cOZWtXiWciPl6DbLapulDJP085StAyJU9d3JWaMGPuQCsp6vpNMUt3b-pd1l21tpHeQHwz2CtgHI753qb30K7xahXVggZp59f1pWhZSrVXIBJj-2HLmWL-3fUc0W6DwMRNH3XxYtWOyvRs4pSZNlD3at4Y-PfwRqBoyHb5uu_NNf_76ayUvWe0gj0cwnWTmsZIbTgV5XElCaXjLB-RjoIH92Ub7vmdO8YlEeBJzyNKvX_F9neTUT48EGAGzRSpQAYch0Y3wOvxKAiQrCdpLO1p0NFmOrDURF5j58uuqrehBEVzuRPHf9wZOpg3vkA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/consults",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"consults"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create veterinaire",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NTA5MzgsImV4cCI6MTc0MjU1NDUzOCwicm9sZXMiOlsiUk9MRV9ESVJFQ1RPUiJdLCJ1c2VybmFtZSI6Imthb0BnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJrYW8ifQ.o5RXpxys4Wvx0RJQ_9vhLYdm8cOZWtXiWciPl6DbLapulDJP085StAyJU9d3JWaMGPuQCsp6vpNMUt3b-pd1l21tpHeQHwz2CtgHI753qb30K7xahXVggZp59f1pWhZSrVXIBJj-2HLmWL-3fUc0W6DwMRNH3XxYtWOyvRs4pSZNlD3at4Y-PfwRqBoyHb5uu_NNf_76ayUvWe0gj0cwnWTmsZIbTgV5XElCaXjLB-RjoIH92Ub7vmdO8YlEeBJzyNKvX_F9neTUT48EGAGzRSpQAYch0Y3wOvxKAiQrCdpLO1p0NFmOrDURF5j58uuqrehBEVzuRPHf9wZOpg3vkA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"kao@gmail.com\",\r\n    \"firstname\": \"kao\",\r\n    \"lastname\": \"utar\",\r\n    \"plainPassword\": \"123\",\r\n    \"roles\": [\r\n        \"ROLE_VETERINARIAN\"\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/auth",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create director",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"kao@gmail.com\",\r\n    \"firstname\": \"kao\",\r\n    \"lastname\": \"utar\",\r\n    \"plainPassword\": \"123\",\r\n    \"roles\": [\r\n        \"ROLE_DIRECTOR\"\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/users",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create assistant",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NTA5MzgsImV4cCI6MTc0MjU1NDUzOCwicm9sZXMiOlsiUk9MRV9ESVJFQ1RPUiJdLCJ1c2VybmFtZSI6Imthb0BnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJrYW8ifQ.o5RXpxys4Wvx0RJQ_9vhLYdm8cOZWtXiWciPl6DbLapulDJP085StAyJU9d3JWaMGPuQCsp6vpNMUt3b-pd1l21tpHeQHwz2CtgHI753qb30K7xahXVggZp59f1pWhZSrVXIBJj-2HLmWL-3fUc0W6DwMRNH3XxYtWOyvRs4pSZNlD3at4Y-PfwRqBoyHb5uu_NNf_76ayUvWe0gj0cwnWTmsZIbTgV5XElCaXjLB-RjoIH92Ub7vmdO8YlEeBJzyNKvX_F9neTUT48EGAGzRSpQAYch0Y3wOvxKAiQrCdpLO1p0NFmOrDURF5j58uuqrehBEVzuRPHf9wZOpg3vkA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"john@gmail.com\",\r\n    \"firstname\": \"john\",\r\n    \"lastname\": \"doe\",\r\n    \"plainPassword\": \"123\",\r\n    \"roles\": [\r\n        \"ROLE_ASSISTANT\"\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/users",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create owner",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NjE4MTUsImV4cCI6MTc0MjU2NTQxNSwicm9sZXMiOlsiUk9MRV9ESVJFQ1RPUiJdLCJ1c2VybmFtZSI6Imthb0BnbWFpbC5jb20iLCJmaXJzdG5hbWUiOiJrYW8ifQ.TTq1sBme3mSzUJoOxQBQOMGzXXMYiDsxRfemFSQL2nMxulf-HyyUq_92RKnsnE-ChTOWAFHmPR_R0RxkGpMNRnF6sg0hiAU19Z9lksvKjoB6nF8ZNv8rbQPswFYxuSdXgvH6pM0mF2WeddPECYT02rB4PzpjA_xzNtKGCJ1WnJLuURMvEdDD5eYMb77t27TT9fTzbXlHVzNJ4U7W6-jZOsXbniwF-cHg8BkFnnBIhHku5OHrDhS4EheuzxbUM7E7Tif4tb3zPiaPj8iUq-fBNSwTE-6Oa_LLbLi4bvYySR95MUh_pbvDtg_hqi6qDinYhTYLB4sS2RzCfQCyaO--vQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"sdm\",\r\n    \"lastname\": \"centmoinsocho\",\r\n    \"email\":\"92@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/users",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create animal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NjI2NjQsImV4cCI6MTc0MjU2NjI2NCwicm9sZXMiOlsiUk9MRV9BU1NJU1RBTlQiXSwidXNlcm5hbWUiOiJqb2huQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6ImpvaG4ifQ.uEPJuQgW6OgjaulLkN_v4qeCYnSnxIjLe55LZoe7MD-WPsAbu1ODJ4VuTWqX-3V6wA9VJyhxEOKlgVcA2WbG3PQIBe5DoO1VoYiBufnWbh8ihV2U8g0Wx_qqRZoj88ZWhDxhZyXwzYKuUOyHAvPc330YdgSrQeU461MpvUu1CxZS1o9HiQrHIVzcFNYpa-ps-bS8otVrBi57uyIBZXcdb0b9QvCQG4BeYCtSdatGBv-_IfwhJlcVEyxcXo4ieGiF-o6r5N9GG7biAQY8H6fcyHcXdtI2fmQD6NbKfrbemmbtwdq8TAAGHnf_TWMKcUbkSbWcTLYhtXAxXKeM2jIMqA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"miaou\",\r\n    \"birthday\": \"2023-07-15\",\r\n    \"media\": \"/api/media/3\",\r\n    \"owner\":\"api/users/6\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/animals",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"animals"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create treatment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NjM0ODYsImV4cCI6MTc0MjU2NzA4Niwicm9sZXMiOlsiUk9MRV9WRVRFUklOQVJJQU4iXSwidXNlcm5hbWUiOiJtYWhhQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6Im1haGEifQ.HxbqzhwKlObWpPgHnCZ2DNRaZe_26c9MVsrUxHsuWot1yI3MFNorjQVkOe6-c3Hp9yUIk5JQ59K_L_KwRN06ZbtKTCgOkt5XxF6jf_TO4IdN40DuJ22ThhM-F8-9t5atnxjdMvAJIKm6xh5F93YcOphekh2FBhhLxXO2jWKKtQplrF3-9d273mXI-kGl0HdoBbC5XYryDjh0knCuauE-PGOTpPhcMonB_NYV6wR2wd8kiMi6RI2gEAxGnmUBW8N05g1MXR2nTPqMse2ZdWID-szljuO24rOUMclHN3u5qsUT85vT3RvABhr7pPjkhhINf86SbC0ZaJRk3pE2jM91eA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Consultation générale\",\r\n  \"description\": \"Examen médical complet de l'animal pour évaluer son état de santé.\",\r\n  \"price\": 40,\r\n  \"duration\": 30\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/treatments",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"treatments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create consult",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NDI1NjQ1MTMsImV4cCI6MTc0MjU2ODExMywicm9sZXMiOlsiUk9MRV9BU1NJU1RBTlQiXSwidXNlcm5hbWUiOiJqb2huQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6ImpvaG4ifQ.QfSpzElQcOkIFOXcTd5uNnK0zRDk8O_lOBlVPje3wNK3YsGOhQ26nYTlJUf4gteSxlnBBTLkE6De5qKLviIXwwgoisSTPErlWtXdnifhAN8OZBI7hqQBE5MzRRavtbe3koCA_x9NyvM6JfKE-Sp3lRzauDG2d68Y184dLy5npXC2teyXQRppzilz6XN-__j_vWea__f3SJFRjydnmubc5cbg8c1U3RIsRJpk_y_y_nLCMLVqCqqf_sqAImT6bfbxX3lYqTez13jT680ngm2bOF1LfuIl2Oi4GcvJd1I6LseCoU9VY7pLtPR9rrw-ADJNaIliRO9JWuXnIZerX-rzJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"consultDate\": \"2025-03-25\",\r\n  \"reason\": \"Check-up général\",\r\n  \"animal\": \"/api/animals/1\",\r\n  \"assistant\": \"/api/users/4\",\r\n  \"veterinary\": \"/api/users/2\",\r\n  \"status\": \"programmé\",\r\n  \"paymentStatus\": \"unpaid\",\r\n  \"treatment\": [\"/api/treatments/1\", \"/api/treatments/2\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/consults",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"consults"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login vet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"maha@gmail.com\",\r\n    \"password\":\"123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/auth",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login director",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"kao@gmail.com\",\r\n    \"password\":\"123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/auth",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login assistant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"john@gmail.com\",\r\n    \"password\":\"123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/auth",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create media",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/Downloads/fofo.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://127.0.0.1:8001/api/media?content",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"media"
+					],
+					"query": [
+						{
+							"key": "content",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
